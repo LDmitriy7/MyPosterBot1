@@ -5,6 +5,7 @@ services:
     restart: always
     environment:
       MONGO_HOST: mongo
+      TZ: Europe/Moscow
   mongo:
     image: mongo
     restart: always
