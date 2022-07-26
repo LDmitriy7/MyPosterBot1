@@ -1,6 +1,6 @@
 from telebot import on, bot, ctx
 
-from assets import kbs
+from assets import kbs, models
 
 
 @on.command('start', state='*')
@@ -11,7 +11,6 @@ def _():
 
 @on.photo()
 def _():
-    ctx.data.clear()
-    ctx.data['photos'] = [ctx.file_id]
+    models.Post(photos=[ctx.file_id]).save()
     bot.send_message('В какой канал отправить?', kbs.Channels())
     ctx.state = 'NewPost'

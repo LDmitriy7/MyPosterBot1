@@ -4,7 +4,7 @@ from threading import Timer
 
 from telebot import ctx, bot, objects
 
-from . import config, kbs, texts
+from . import config, kbs, texts, models
 
 
 def md_to_html(text: str):
@@ -14,9 +14,10 @@ def md_to_html(text: str):
 
 
 def publish_post(at_datetime: datetime = None):
-    channel = ctx.data['channel']
-    photos = ctx.data['photos']
-    sign = ctx.data.get('sign')
+    post = models.Post.get()
+    channel = post.channel
+    photos = post.photos
+    sign = post.sign
 
     if sign:
         sign = md_to_html(sign)
@@ -40,7 +41,6 @@ def publish_post(at_datetime: datetime = None):
     bot.send_message(text, reply_markup=objects.ReplyKeyboardRemove())
 
     ctx.state = None
-    ctx.data.clear()
 
 
 def find_channel(username: str) -> config.Channel | None:

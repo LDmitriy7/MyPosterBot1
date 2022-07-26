@@ -1,23 +1,23 @@
 from telebot import on, ctx, bot
 
-from assets import kbs, helpers
+from assets import kbs, helpers, models
 
 
 @on.photo(state='NewPost')
-def _():
-    ctx.data['photos'] = ctx.data['photos'] + [ctx.file_id]
+def _(post: models.Post):
+    post.photos.append(ctx.file_id)
 
 
 @on.text(kbs.Channels.all, state='NewPost')
-def _():
-    ctx.data['channel'] = ctx.text
+def _(post: models.Post):
+    post.channel = ctx.text
     channel = helpers.find_channel(ctx.text)
 
     match len(channel.post_signs):
         case 0:
             helpers.ask_publication_time()
         case 1:
-            ctx.data['sign'] = channel.post_signs[0]
+            post.sign = channel.post_signs[0]
             helpers.ask_publication_time()
         case _:
             bot.send_message('Выбери подпись:', kbs.Signs(channel))
@@ -25,8 +25,8 @@ def _():
 
 
 @on.text(state='NewPost:sign')
-def _():
-    ctx.data['sign'] = ctx.text
+def _(post: models.Post):
+    post.sign = ctx.text
     helpers.ask_publication_time()
 
 
