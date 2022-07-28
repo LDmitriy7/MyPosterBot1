@@ -1,46 +1,25 @@
-from telebot import on, ctx, bot
+from telebot import on, ctx, bot, html, objects
 
-from assets import kbs, helpers, models
+from assets import models, kbs, helpers
 
 
-@on.photo(state='NewPost')
+@on.photo()
+def _():
+    helpers.process_media_group_photo()
+    ctx.state = 'NewPost'
+    helpers.send_post(models.Post.get())
+    bot.send_message('В какой канал отправить?', kbs.Channels())
+
+
+@on.text(state='NewPost')
 def _(post: models.Post):
-    post.photos.append(ctx.file_id)
-
-
-@on.text(kbs.Channels.all, state='NewPost')
-def _(post: models.Post):
-    post.channel = ctx.text
     channel = helpers.find_channel(ctx.text)
 
-    match len(channel.post_signs):
-        case 0:
-            helpers.ask_publication_time()
-        case 1:
-            post.sign = channel.post_signs[0]
-            helpers.ask_publication_time()
-        case _:
-            bot.send_message('Выбери подпись:', kbs.Signs(channel))
-            ctx.state = 'NewPost:sign'
+    if not channel:
+        bot.send_message('Ошибка, выбери канал из списка')
 
+    post_msg = helpers.publish_post(channel, post)  # TODO: safe
+    text = html.a('Пост опубликован', helpers.get_url(post_msg))
 
-@on.text(state='NewPost:sign')
-def _(post: models.Post):
-    post.sign = ctx.text
-    helpers.ask_publication_time()
-
-
-@on.text(kbs.PublicationTime.now, state='NewPost:publication_time')
-def _():
-    helpers.publish_post()
-
-
-@on.text(state='NewPost:publication_time')
-def _():
-    try:
-        publication_time = helpers.parse_datetime(ctx.text)
-    except ValueError:
-        bot.send_message('Неправильный формат времени')
-        return
-
-    helpers.publish_post(publication_time)
+    helpers.reset_ctx()
+    bot.send_message(text, kbs.remove)

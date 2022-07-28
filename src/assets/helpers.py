@@ -1,81 +1,67 @@
-import re
-from datetime import datetime, timedelta
-from threading import Timer
+import time
 
-from telebot import ctx, bot, objects
+from telebot import ctx, bot, objects, exc
+from . import models
+from threading import Lock
 
-from . import config, kbs, texts, models
-
-
-def md_to_html(text: str):
-    text = re.sub(r'\[(.+)]\((.+)\)', r'<a href="\2">\1</a>', text)
-    text = re.sub(r'<a href="@(.+)">(.+)</a>', r'<a href="https://t.me/\1">\2</a>', text)
-    return text
+lock = Lock()
 
 
-def publish_post(at_datetime: datetime = None):
-    post = models.Post.get()
-    channel = post.channel
-    photos = post.photos
-    sign = post.sign
-
-    if sign:
-        sign = md_to_html(sign)
-
-    def _send():
-        if len(photos) > 1:
-            media = [objects.InputMediaPhoto(photos[0], caption=sign)]
-            media += [objects.InputMediaPhoto(p) for p in photos[1:]]
-            bot.send_media_group(media, chat_id=channel)
-        else:
-            bot.send_photo(photos[0], chat_id=channel, caption=sign)
-
-    if at_datetime:
-        delay = (at_datetime - datetime.now()).total_seconds()
-        Timer(delay, _send).start()
-        text = f'Пост запланирован на {at_datetime}'
-    else:
-        _send()
-        text = 'Пост опубликован'
-
-    bot.send_message(text, reply_markup=objects.ReplyKeyboardRemove())
-
+def reset_ctx():
     ctx.state = None
+    ctx.delete_current_models()
+    ctx.data.clear()
 
 
-def find_channel(username: str) -> config.Channel | None:
-    for c in config.channels:
-        if c.username == username:
-            return c
+def find_channel(title: str) -> models.Channel | None:
+    for channel in models.Channel.get_collection():
+        if channel.title == title:
+            return channel
 
 
-def ask_publication_time():
-    bot.send_message(texts.ask_publication_time, kbs.PublicationTime())
-    ctx.state = 'NewPost:publication_time'
+def send_post(post: models.Post, chat_id: int | str = None) -> objects.Message | list[objects.Message]:
+    if len(post.photos) > 1:
+        media = [objects.InputMediaPhoto(i) for i in post.photos]
+        return bot.send_media_group(media, chat_id=chat_id)
+    else:
+        return bot.send_photo(post.photos[0], chat_id=chat_id)
 
 
-def parse_datetime(text: str) -> datetime:
-    now = datetime.now()
-    raw_datetime = text.split(' ')
-    hour, minute = [int(i) for i in raw_datetime[-1].split(':')]
+def publish_post(channel: models.Channel, post: models.Post) -> objects.Message | list[objects.Message]:
+    return send_post(post, channel.chat_id)
 
-    match len(raw_datetime):
-        case 1:
-            day = now.day
-        case 2:
-            day = int(raw_datetime[0])
-        case _:
-            raise ValueError('Invalid datetime')
 
-    date = now.replace(day=day, hour=hour, minute=minute, second=0, microsecond=0)
+def get_url(post: objects.Message | list[objects.Message]):
+    url = 'https://t.me'
 
-    if date < now:
-        if date.day < now.day:
-            if now.month == 12:
-                date = date.replace(year=date.year + 1, month=1)
-            else:
-                date = date.replace(month=date.month + 1)
-        else:
-            date = date + timedelta(days=1)
+    if isinstance(post, list):
+        post = post[0]
 
-    return date
+    if post.chat.username:
+        url += f'/{post.chat.username}'
+    else:
+        shift = -1_000_000_000_000
+        url += f'/c/{shift - post.chat.id}'
+
+    return url + f'/{post.message_id}'
+
+
+def process_media_group_photo():
+    lock.acquire()
+
+    if ctx.data.get('media_group_id'):
+        with models.Post.proxy() as post:
+            post.photos.append(ctx.file_id)
+        lock.release()
+        raise exc.StopProcessing()
+
+    models.Post(photos=[ctx.file_id]).save()
+
+    ctx.data['media_group_id'] = ctx.media_group_id
+    lock.release()
+
+    if ctx.media_group_id:
+        bot.send_chat_action('typing')
+        time.sleep(1)  # wait for other photos
+
+    ctx.data['media_group_id'] = None

@@ -4,13 +4,12 @@ from telebot import UserProxyModel
 
 
 @dataclass
-class Channel:
-    username: str
-    post_signs: list[str]
+class Channel(UserProxyModel):
+    chat_id: str = None
+    title: str = None
+    post_sign: str = None
 
 
 @dataclass
 class Post(UserProxyModel):
-    channel: str = None
-    sign: str = None
     photos: list[str] = field(default_factory=list)

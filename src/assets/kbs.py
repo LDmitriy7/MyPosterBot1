@@ -1,17 +1,13 @@
-from . import config
-from telebot.objects import Keyboard
+from telebot.objects import Keyboard, ReplyKeyboardRemove
+
+from . import models
 
 
 class Channels(Keyboard):
-    all = [c.username for c in config.channels]
 
     def __init__(self):
-        self.add_rows(*self.all)
-
-
-class Signs(Keyboard):
-    def __init__(self, channel: config.Channel):
-        self.add_rows(*channel.post_signs)
+        channels = models.Channel.get_collection()
+        self.add_rows(*[c.title for c in channels])
 
 
 class PublicationTime(Keyboard):
@@ -19,3 +15,13 @@ class PublicationTime(Keyboard):
 
     def __init__(self):
         self.add_row(self.now)
+
+
+class Cancel(Keyboard):
+    button = 'Отменить'
+
+    def __init__(self):
+        self.add_row(self.button)
+
+
+remove = ReplyKeyboardRemove()

@@ -1,16 +1,22 @@
-from telebot import on, bot, ctx
+from telebot import on, bot
 
-from assets import kbs, models
+from assets import helpers, commands, kbs
 
 
-@on.command('start', state='*')
+@on.command(commands.START, state='*')
 def _():
-    ctx.state = None
-    bot.send_message('Отправь мне картинки')
+    helpers.reset_ctx()
+    bot.send_message('Отправь мне пост', kbs.remove)
 
 
-@on.photo()
+@on.command(commands.CANCEL, state='*')
+@on.text(kbs.Cancel.button, state='*')
 def _():
-    models.Post(photos=[ctx.file_id]).save()
-    bot.send_message('В какой канал отправить?', kbs.Channels())
-    ctx.state = 'NewPost'
+    helpers.reset_ctx()
+    bot.send_message('Отменено', kbs.remove)
+
+
+@on.command(commands.ADMIN, state='*')
+def _():
+    commands.setup()
+    bot.send_message('Команды установлены')
