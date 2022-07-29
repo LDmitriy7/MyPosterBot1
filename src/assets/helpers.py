@@ -92,7 +92,7 @@ def process_media_group_photo():
 def update_post_sign(channel: models.Channel, text: str | None, entities: list[objects.MessageEntity]):
     channel.post_sign = text
     channel.post_sign_entities = entities
-    channel.replace_in_collection(key='chat_id')
+    channel.replace_in_collection(key='title')
     bot.edit_message_reply_markup(message_id=ctx.data['request_msg_id'])
     reset_ctx()
     bot.send_message('Подпись обновлена')

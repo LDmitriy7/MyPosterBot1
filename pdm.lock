@@ -67,7 +67,7 @@ summary = "HTTP library with thread-safe connection pooling, file post, and more
 
 [metadata]
 lock_version = "4.0"
-content_hash = "sha256:a015ba8ef221137c6f1f8860670257dd8a57f6c6b0ba919a3d3ee55a3c6fe037"
+content_hash = "sha256:990268f2a34d71033087814b3c988b3bfa5b8b0dbea1040c18d056af7615901e"
 
 [metadata.files]
 "bebrogram 0.1.26" = [
