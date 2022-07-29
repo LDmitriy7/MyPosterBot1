@@ -1,4 +1,4 @@
-from telebot import objects, bot
+from telebot import objects, bot, ctx
 
 START = 'start'
 ADMIN = 'admin'
@@ -18,4 +18,5 @@ USER_COMMANDS = [
 
 
 def setup():
+    bot.delete_my_commands(scope=objects.BotCommandScopeChat(ctx.user_id))
     bot.set_my_commands(USER_COMMANDS)

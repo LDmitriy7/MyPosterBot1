@@ -8,7 +8,8 @@ from assets import config
 @on.message(state='*')
 def check_access():
     if ctx.user_id not in config.admins_ids:
-        raise exc.StopProcessing()
+        pass
+        # raise exc.StopProcessing()
 
 
 check_access.exclusive = False

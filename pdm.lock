@@ -1,6 +1,6 @@
 [[package]]
 name = "bebrogram"
-version = "0.1.25"
+version = "0.1.26"
 requires_python = ">=3.10"
 summary = ""
 dependencies = [
@@ -70,9 +70,9 @@ lock_version = "4.0"
 content_hash = "sha256:a015ba8ef221137c6f1f8860670257dd8a57f6c6b0ba919a3d3ee55a3c6fe037"
 
 [metadata.files]
-"bebrogram 0.1.25" = [
-    {url = "https://files.pythonhosted.org/packages/89/aa/df18af706d21d5a52a445397136f7ef1eae2ee5e433ba99f99376bfa59ff/bebrogram-0.1.25-py3-none-any.whl", hash = "sha256:c9feb76e3751fa424eea0d19acf58ed3c2dc82d2fbf1caf86825de464a2a3f35"},
-    {url = "https://files.pythonhosted.org/packages/c3/78/8a637667a2c3f250a9d72150ea4f12cb912a7da570c80780d5b343997a66/bebrogram-0.1.25.tar.gz", hash = "sha256:ffe7bb3c920e08b23d2aa653eee50c1628676c938abce75b4a0600d46303ce1c"},
+"bebrogram 0.1.26" = [
+    {url = "https://files.pythonhosted.org/packages/9a/a6/36776df6ee26a8eb45ea393cb7a61214a1de6a5221aec4019f77ed31fbee/bebrogram-0.1.26-py3-none-any.whl", hash = "sha256:7f8c12e64cc30490cfe5ff66cbf05269a0737413e6187bfe6858530bd7f32d89"},
+    {url = "https://files.pythonhosted.org/packages/9f/2a/993ee3371fc71b658a909ba2856a0e4e0ea1499169428955e6fc5a1628c9/bebrogram-0.1.26.tar.gz", hash = "sha256:f956274308d43a50c51b75af673d86eb6a77c5c656dd1eeb81698c861c4ecb3d"},
 ]
 "certifi 2022.6.15" = [
     {url = "https://files.pythonhosted.org/packages/cc/85/319a8a684e8ac6d87a1193090e06b6bbb302717496380e225ee10487c888/certifi-2022.6.15.tar.gz", hash = "sha256:84c85a9078b11105f04f3036a9482ae10e4621616db313fe045dd24743a0820d"},

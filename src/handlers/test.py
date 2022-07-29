@@ -1,8 +1,8 @@
-from telebot import on
+from telebot import on, bot
 
-from assets import models
+from assets import texts
 
 
 @on.command('test', state='*')
-def _(post: models.Post):
-    print(post)
+def _():
+    bot.send_message(texts.ask_publication_time)

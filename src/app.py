@@ -12,4 +12,4 @@ handlers.setup()
 tasks.setup()
 middlewares.setup()
 
-run(parse_mode='html')
+run(parse_mode='html', disable_web_page_preview=True)
