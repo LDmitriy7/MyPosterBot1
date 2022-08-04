@@ -6,7 +6,7 @@ from . import models
 class Channels(Keyboard):
 
     def __init__(self):
-        channels = models.Channel.get_collection()
+        channels = models.Channel.find_all()
         self.add_rows(*[c.title for c in channels])
 
 

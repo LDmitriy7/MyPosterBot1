@@ -1,29 +1,32 @@
-from telebot import ctx, bot, on, exc, objects
-from assets import commands, kbs, helpers, models
+from telebot import ctx, bot, on, objects, html
+
+from assets import commands, texts, helpers, models
 
 
 @on.command(commands.ADD_CHANNEL)
 def _():
-    bot.send_message('Отправь юзернейм канала', reply_markup=kbs.Cancel())
-    ctx.state = 'AddChannel'
+    bot.send_message(texts.adding_channel_info)
 
 
-@on.text(state='AddChannel')
-def _(channel: models.Channel):
-    try:
-        member = bot.get_chat_member(ctx.text)
-    except exc.RequestError:
-        bot.send_message('Канал не найден. Добавь меня в канал и попробуй снова')
+@on.my_chat_member(chat_type='channel', state='*')
+def _():
+    if not isinstance(ctx.new_chat_member, objects.ChatMemberAdministrator):
         return
 
-    if not isinstance(member, objects.ChatMemberOwner):
-        bot.send_message('Вы должны быть владельцем канала')
+    if models.Channel.find(chat_id=ctx.chat_id):
         return
 
-    chat = bot.get_chat(ctx.text)
-    channel.chat_id = chat.id
-    channel.title = chat.title
-    channel.save_to_collection()
+    title = html.a(ctx.chat.title, helpers.get_url(ctx.chat))
+
+    if not ctx.new_chat_member.can_post_messages:
+        text = texts.ask_posting_right.format(title=title)
+        bot.send_message(text, chat_id=ctx.user_id)
+        return
+
+    channel = models.Channel()
+    channel.chat_id = ctx.chat_id
+    channel.title = ctx.chat.title
+    channel.save()
 
     helpers.reset_ctx()
-    bot.send_message('Канал добавлен', kbs.remove)
+    bot.send_message(f'Канал {title} успешно подключен', chat_id=ctx.user_id)

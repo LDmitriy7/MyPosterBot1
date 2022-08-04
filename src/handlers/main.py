@@ -3,7 +3,7 @@ from telebot import on, bot
 from assets import helpers, commands, kbs
 
 
-@on.command(commands.START, state='*')
+@on.start(state='*')
 def _():
     helpers.reset_ctx()
     bot.send_message('Отправь мне пост', kbs.remove)

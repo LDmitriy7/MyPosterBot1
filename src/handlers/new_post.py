@@ -7,18 +7,20 @@ from assets import models, kbs, helpers, texts
 def _():
     helpers.process_media_group_photo()
     ctx.state = 'NewPost'
+
     helpers.send_post(models.Post.get())
     bot.send_message('В какой канал отправить?', kbs.Channels())
 
 
 @on.text(state='NewPost')
 def _():
-    channel = helpers.find_channel(ctx.text)
+    channel = models.Channel.find(title=ctx.text)
 
     if not channel:
         bot.send_message('Ошибка, выбери канал из списка')
+        return
 
-    channel.save()
+    channel.save(as_current=True)
     ctx.state = 'NewPost:publication_time'
     bot.send_message(texts.ask_publication_time, kbs.PublicationTime())
 

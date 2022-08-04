@@ -12,12 +12,14 @@ def _():
 
 @on.text(state='Channels')
 def _():
-    channel = helpers.find_channel(ctx.text)
+    channel = models.Channel.find(title=ctx.text)
 
     if not channel:
         bot.send_message('Ошибка, выбери канал из списка')
+        return
 
-    channel.save()
+    channel.save(as_current=True)
+
     ctx.state = 'Channels:sign'
     bot.delete_message(ctx.data['request_msg_id'])
     msg = bot.send_message('Отправь новую подпись для постов в канале', kbs.EditSign())

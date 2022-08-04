@@ -1,8 +1,12 @@
-from telebot import on, bot
-
-from assets import texts
+from assets import models
+from telebot import on
 
 
 @on.command('test', state='*')
 def _():
-    bot.send_message(texts.ask_publication_time)
+    models.Channel(title='test').save(as_current=True)
+
+
+@on.command('test2', state='*')
+def _():
+    print(models.Channel.current())
