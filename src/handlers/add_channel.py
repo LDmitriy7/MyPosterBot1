@@ -1,6 +1,6 @@
+import helpers
+from assets import commands, texts, models
 from telebot import ctx, bot, on, objects, html
-
-from assets import commands, texts, helpers, models
 
 
 @on.command(commands.ADD_CHANNEL)
@@ -30,3 +30,6 @@ def _():
 
     helpers.reset_ctx()
     bot.send_message(f'Канал {title} успешно подключен', chat_id=ctx.user_id)
+
+    if helpers.has_one_channel():
+        bot.send_message('Теперь ты можешь отправлять или пересылать мне посты в любое время', chat_id=ctx.user_id)

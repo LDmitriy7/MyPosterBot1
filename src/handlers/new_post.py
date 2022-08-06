@@ -1,13 +1,23 @@
 from telebot import on, ctx, bot, html
 
-from assets import models, kbs, helpers, texts
+import helpers
+from assets import models, kbs, texts
 
 
 @on.photo()
 def _():
     helpers.process_media_group_photo()
+    helpers.has_any_channel()
     ctx.state = 'NewPost'
+    helpers.send_post(models.Post.get())
+    bot.send_message('В какой канал отправить?', kbs.Channels())
 
+
+@on.animation()
+def _():
+    models.Post(gif=ctx.file_id, caption=ctx.caption).save()
+    helpers.has_any_channel()
+    ctx.state = 'NewPost'
     helpers.send_post(models.Post.get())
     bot.send_message('В какой канал отправить?', kbs.Channels())
 

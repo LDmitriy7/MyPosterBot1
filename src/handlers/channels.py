@@ -1,10 +1,11 @@
+import helpers
+from assets import commands, kbs, models
 from telebot import on, bot, ctx
-
-from assets import commands, kbs, helpers, models
 
 
 @on.command(commands.CHANNELS)
 def _():
+    helpers.has_any_channel()
     ctx.state = 'Channels'
     msg = bot.send_message('Выбери канал для редактирования', reply_markup=kbs.Channels())
     ctx.data['request_msg_id'] = msg.message_id
@@ -24,6 +25,11 @@ def _():
     bot.delete_message(ctx.data['request_msg_id'])
     msg = bot.send_message('Отправь новую подпись для постов в канале', kbs.EditSign())
     ctx.data['request_msg_id'] = msg.message_id
+
+
+@on.message(state='Channels')
+def _():
+    bot.send_message('Ошибка, выбери канал из списка')
 
 
 @on.button(kbs.EditSign.empty, state='Channels:sign')

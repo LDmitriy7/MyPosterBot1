@@ -5,7 +5,7 @@ from threading import Lock, Timer
 from telebot import ctx, bot, objects, exc
 from telebot.utils import entities_to_html
 
-from . import models
+from assets import models, texts
 
 lock = Lock()
 
@@ -16,18 +16,15 @@ def reset_ctx():
     ctx.data.clear()
 
 
-# def find_channel(title: str) -> models.Channel | None:
-#     for channel in models.Channel.get_collection():
-#         if channel.title == title:
-#             return channel
-
-
 def send_post(
         post: models.Post,
         sign: str = None,
         chat_id: int | str = None,
 ) -> objects.Message | list[objects.Message]:
     caption = (post.caption or '') + '\n\n' + (sign or '')
+
+    if post.gif:
+        return bot.send_animation(post.gif, chat_id=chat_id, caption=caption)
 
     if len(post.photos) > 1:
         media = [objects.InputMediaPhoto(post.photos[0], caption=caption)]
@@ -64,19 +61,16 @@ def get_url(obj: objects.Message | list[objects.Message] | objects.Chat):
 
     if isinstance(obj, objects.Message):
         chat = obj.chat
+        message_id = obj.message_id
     else:
         chat = obj
+        message_id = None
 
-    if chat.username:
-        url += f'/{chat.username}'
-    else:
+    if message_id:
         shift = -1_000_000_000_000
-        url += f'/c/{shift - chat.id}'
-
-    if isinstance(obj, objects.Message):
-        url += f'/{obj.message_id}'
+        url += f'/c/{shift - chat.id}/{message_id}'
     else:
-        url += f'/1'
+        url = bot.get_chat(chat.id).invite_link
 
     return url
 
@@ -156,3 +150,14 @@ def check_posting_rights():
         return bool(member.can_post_messages)
 
     return False
+
+
+def has_any_channel():
+    if not models.Channel.find():
+        bot.send_message('Ты еще не подключил ни одного канала')
+        bot.send_message(texts.adding_channel_info)
+        raise exc.ExitHandler()
+
+
+def has_one_channel() -> bool:
+    return len(models.Channel.find_all()) == 1

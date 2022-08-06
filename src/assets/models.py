@@ -13,4 +13,5 @@ class Channel(UserModel):
 @dataclass
 class Post(UserProxyModel):
     photos: list[str] = field(default_factory=list)
+    gif: str = None
     caption: str = None
