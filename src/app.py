@@ -6,7 +6,7 @@ import handlers
 import middlewares
 import tasks
 
-logging.basicConfig(level=30)
+logging.basicConfig(level=20, filename='.log', filemode='w')
 
 handlers.setup()
 tasks.setup()

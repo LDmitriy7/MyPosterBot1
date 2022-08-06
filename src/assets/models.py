@@ -8,6 +8,7 @@ class Channel(UserModel):
     chat_id: int = None
     title: str = None
     post_sign: str = None
+    invite_link: str = None
 
 
 @dataclass

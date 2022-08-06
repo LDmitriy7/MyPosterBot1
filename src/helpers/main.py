@@ -53,7 +53,7 @@ def publish_post(
         return send()
 
 
-def get_url(obj: objects.Message | list[objects.Message] | objects.Chat):
+def get_url(obj: objects.Message | list[objects.Message] | objects.Chat, invite_link: str = None):
     url = 'https://t.me'
 
     if isinstance(obj, list):
@@ -66,11 +66,8 @@ def get_url(obj: objects.Message | list[objects.Message] | objects.Chat):
         chat = obj
         message_id = None
 
-    if message_id:
-        shift = -1_000_000_000_000
-        url += f'/c/{shift - chat.id}/{message_id}'
-    else:
-        url = bot.get_chat(chat.id).invite_link
+    shift = -1_000_000_000_000
+    url += f'/c/{shift - chat.id}/{message_id or 1_000_000_000}'
 
     return url
 
