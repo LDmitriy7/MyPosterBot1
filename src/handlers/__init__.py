@@ -5,3 +5,4 @@ def setup():
     from . import new_post
 
     from . import test
+    from . import admin

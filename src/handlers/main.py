@@ -1,11 +1,17 @@
 from telebot import on, bot
 
 import helpers
-from assets import commands, kbs, models, texts
+from assets import commands, kbs, models, texts, config
+
+
+@on.start(state='*', user_id=config.admins_ids)
+def _():
+    commands.setup()
+    start.func()
 
 
 @on.start(state='*')
-def _():
+def start():
     helpers.reset_ctx()
 
     if not models.Channel.find():
@@ -20,9 +26,3 @@ def _():
 def _():
     helpers.reset_ctx()
     bot.send_message('Отменено', kbs.remove)
-
-
-@on.command(commands.ADMIN, state='*')
-def _():
-    commands.setup()
-    bot.send_message('Команды установлены')

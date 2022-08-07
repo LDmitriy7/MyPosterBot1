@@ -1,6 +1,8 @@
-from telebot import on, bot
+from telebot import on, ctx
+
+from assets import kbs
 
 
-@on.command('test', state='*')
+@on.button(kbs.Channels.channel, state='*')
 def _():
-    bot.send_message('?', chat_id=7244)
+    print(ctx.button['chat_id'])

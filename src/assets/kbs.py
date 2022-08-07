@@ -10,6 +10,16 @@ class Channels(Keyboard):
         self.add_rows(*[c.title for c in channels])
 
 
+class Channels(InlineKeyboard):
+    channel = CallbackButton(text='{title}', id='Channels:channel')
+
+    def __init__(self):
+        for c in models.Channel.find_all():
+            self.add_row(
+                self.channel(title=c.title, chat_id=c.chat_id)
+            )
+
+
 class Cancel(Keyboard):
     button = 'Отменить'
 
@@ -28,8 +38,8 @@ class EditSign(InlineKeyboard):
         self.add_row(self.empty, self.cancel)
 
 
-class PublicationTime(Keyboard):
-    now = 'Сейчас'
+class PublicationTime(InlineKeyboard):
+    now = CallbackButton('Сейчас')
 
     def __init__(self):
         self.add_row(self.now)

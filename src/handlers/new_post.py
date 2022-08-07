@@ -22,25 +22,25 @@ def _():
     bot.send_message('В какой канал отправить?', kbs.Channels())
 
 
-@on.text(state='NewPost')
+@on.button(kbs.Channels.channel, state='NewPost')
 def _():
-    channel = models.Channel.find(title=ctx.text)
+    channel = models.Channel.find(chat_id=ctx.button['chat_id'])
 
-    if not channel:
+    if not channel:  # TODO
         bot.send_message('Ошибка, выбери канал из списка')
         return
 
     channel.save(as_current=True)
     ctx.state = 'NewPost:publication_time'
-    bot.send_message(texts.ask_publication_time, kbs.PublicationTime())
+    bot.edit_message_text(texts.ask_publication_time, kbs.PublicationTime())
 
 
-@on.text(kbs.PublicationTime.now, state='NewPost:publication_time')
+@on.button(kbs.PublicationTime.now, state='NewPost:publication_time')
 def _(channel: models.Channel, post: models.Post):
     post_msg = helpers.publish_post(channel, post)  # TODO: safe
     text = html.a('Пост опубликован', helpers.get_url(post_msg))
     helpers.reset_ctx()
-    bot.send_message(text, kbs.remove)
+    bot.edit_message_text(text)
 
 
 @on.text(state='NewPost:publication_time')
