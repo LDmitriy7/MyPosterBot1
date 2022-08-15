@@ -79,7 +79,7 @@ summary = "A list-like structure which implements collections.abc.MutableSequenc
 
 [[package]]
 name = "groof"
-version = "0.1.1"
+version = "0.1.2"
 requires_python = ">=3.10"
 summary = ""
 dependencies = [
@@ -326,9 +326,9 @@ content_hash = "sha256:d42428a137d41b54d7b94210d210fb867a9225b196628d73b7eea8c85
     {url = "https://files.pythonhosted.org/packages/fc/8a/1ac3824da6435a042a43d5a8c68c53bb04acf0998338f85a4b0ccdd44465/frozenlist-1.3.0-cp38-cp38-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:768efd082074bb203c934e83a61654ed4931ef02412c2fbdecea0cff7ecd0274"},
     {url = "https://files.pythonhosted.org/packages/fe/b4/252a6ede3620431eac30f869be462646c203d93dedba9b7ea001548fb868/frozenlist-1.3.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:93641a51f89473837333b2f8100f3f89795295b858cd4c7d4a1f18e299dc0a4f"},
 ]
-"groof 0.1.1" = [
-    {url = "https://files.pythonhosted.org/packages/78/00/8abc10b60a86fe3bae5dc85b2c2df00ddcf40b1fbba2d8222947030f9800/groof-0.1.1-py3-none-any.whl", hash = "sha256:be85b8061bcc3786fb5284337300fb4f67c99cdac321da7bcd2f902899050179"},
-    {url = "https://files.pythonhosted.org/packages/ce/4b/a3bb961309563c40081cdba15f59ff91f3578db161a620876853a1abeeb6/groof-0.1.1.tar.gz", hash = "sha256:f29a2d845b429c46fc307425011529fc133cc1af1252019ea9045273092c03bb"},
+"groof 0.1.2" = [
+    {url = "https://files.pythonhosted.org/packages/00/94/ecd6b4f85f6e22ee25864969ecf02da206f643e040be8ccaee1a2c53f135/groof-0.1.2.tar.gz", hash = "sha256:a8cd4806588226c4904756e29961451eb5aa3b3f0e9dffa24e652c346929c24a"},
+    {url = "https://files.pythonhosted.org/packages/18/7e/d69fe29f4f5d77d3476bd7ed9d787b41196e0521e6d193aabdd4740cabb6/groof-0.1.2-py3-none-any.whl", hash = "sha256:6345cbc0062f10e427642c722a0f7675862838dd665c81c504bfe7323c3bf7cb"},
 ]
 "idna 3.3" = [
     {url = "https://files.pythonhosted.org/packages/04/a2/d918dcd22354d8958fe113e1a3630137e0fc8b44859ade3063982eacd2a4/idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
