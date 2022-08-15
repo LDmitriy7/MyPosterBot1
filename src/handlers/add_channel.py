@@ -1,6 +1,6 @@
 import helpers
 from assets import commands, texts, models
-from telebot import ctx, bot, on, objects, html
+from groof import ctx, bot, on, objects, html
 
 
 @on.command(commands.ADD_CHANNEL)

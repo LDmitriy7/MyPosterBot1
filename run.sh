@@ -3,7 +3,7 @@ set -a
 set +a
 
 if [ "$APP_ENV" = "development" ]; then
-  nodemon src/app.py
+  nodemon src/__main__.py
 elif [ "$APP_ENV" = "production" ]; then
   pdm export >requirements.txt
   docker compose build && docker compose up -d

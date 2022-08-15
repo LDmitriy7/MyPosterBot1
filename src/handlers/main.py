@@ -1,17 +1,10 @@
-from telebot import on, bot
+from groof import bot
 
 import helpers
-from assets import commands, kbs, models, texts, config
+from assets import commands, kbs, models, texts
 
 
-@on.start(state='*', user_id=config.admins_ids)
-def _():
-    commands.setup()
-    start.func()
-
-
-@on.start(state='*')
-def start():
+def on_start():
     helpers.reset_ctx()
 
     if not models.Channel.find():
@@ -21,8 +14,11 @@ def start():
         bot.send_message('Отправь мне пост', kbs.remove)
 
 
-@on.command(commands.CANCEL, state='*')
-@on.text(kbs.Cancel.button, state='*')
-def _():
+def on_start_by_admin():
+    commands.setup()
+    on_start()
+
+
+def cancel():
     helpers.reset_ctx()
     bot.send_message('Отменено', kbs.remove)

@@ -1,8 +1,5 @@
-from telebot import on, ctx
-
-from assets import kbs
+from groof import ctx
 
 
-@on.button(kbs.Channels.channel, state='*')
-def _():
-    print(ctx.button['chat_id'])
+def on_test():
+    print(ctx.button)

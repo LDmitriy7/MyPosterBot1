@@ -1,15 +1,15 @@
 import logging
 
-from telebot import run
+import groof
 
 import handlers
+import jobs
 import middlewares
-import tasks
 
 logging.basicConfig(level=20, filename='.log', filemode='w')
 
 handlers.setup()
-tasks.setup()
 middlewares.setup()
+jobs.setup()
 
-run(parse_mode='html', disable_web_page_preview=True)
+groof.run(parse_mode='html', disable_web_page_preview=True)

@@ -1,2 +1,7 @@
+from groof import on
+
+from .answer_any_query import answer_any_query
+
+
 def setup():
-    from . import main
+    on.callback_query(state='*')(answer_any_query)

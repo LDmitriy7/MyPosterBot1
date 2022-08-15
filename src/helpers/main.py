@@ -2,8 +2,8 @@ import time
 from datetime import datetime, timedelta
 from threading import Lock, Timer
 
-from telebot import ctx, bot, objects, exc
-from telebot.utils import entities_to_html
+from groof import ctx, bot, objects, exc
+from groof.utils import entities_to_html
 
 from assets import models, texts
 
@@ -53,7 +53,7 @@ def publish_post(
         return send()
 
 
-def get_url(obj: objects.Message | list[objects.Message] | objects.Chat, invite_link: str = None):
+def get_url(obj: objects.Message | list[objects.Message] | objects.Chat):
     url = 'https://t.me'
 
     if isinstance(obj, list):

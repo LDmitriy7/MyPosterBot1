@@ -1,4 +1,4 @@
-from telebot import on, ctx, bot, html
+from groof import on, ctx, bot, html
 
 import helpers
 from assets import models, kbs, texts

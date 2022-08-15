@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from telebot import UserModel, UserProxyModel
+from groof import UserModel, UserProxyModel
 
 
 @dataclass

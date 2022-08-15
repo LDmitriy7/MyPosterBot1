@@ -1,4 +1,4 @@
-from telebot import objects, bot, ctx
+from groof import objects, bot, ctx
 
 START = 'start'
 TEST = 'test'

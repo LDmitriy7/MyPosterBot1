@@ -1,4 +1,4 @@
-from telebot import on, bot, objects
+from groof import on, bot, objects
 
 from assets import commands, config
 

@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt
 
 COPY src .
 
-CMD python app.py
+CMD python __main__.py
