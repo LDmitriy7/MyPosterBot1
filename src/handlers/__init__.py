@@ -1,35 +1,33 @@
-from groof import handle
+from groof import Dispatcher
 
 import events
-from . import channels, new_post, add_channel, admin
-from .main import on_start, on_start_by_admin, cancel
-from .test import on_test
+from . import channels, new_post, add_channel, logs, menu, test
 
 
-def setup():
-    handle(events.commands.start_by_admin, on_start_by_admin)
-    handle(events.commands.start, on_start)
+def setup(dp: Dispatcher):
+    dp.handle(events.commands.start_by_admin, menu.on_start_by_admin)
+    dp.handle(events.commands.start, menu.on_start)
 
-    handle(events.commands.cancel, cancel)
-    handle(events.text_cancel, cancel)
-    handle(events.commands.test, on_test)
+    dp.handle(events.commands.cancel, menu.cancel)
+    dp.handle(events.text_cancel, menu.cancel)
+    dp.handle(events.commands.test, test.run)
 
-    handle(events.channels.entry, channels.edit_posts_sign.ask_channel)
-    handle(events.channels.choice, channels.edit_posts_sign.ask_new)
-    handle(events.channels.any_message, channels.edit_posts_sign.ask_channel_from_list)
+    dp.handle(events.channels.entry, channels.edit_posts_sign.ask_channel)
+    dp.handle(events.channels.choice, channels.edit_posts_sign.ask_new)
+    dp.handle(events.channels.any_message, channels.edit_posts_sign.ask_channel_from_list)
 
-    handle(events.edit_posts_sign.choice_empty, channels.edit_posts_sign.set_empty_post_sign)
-    handle(events.edit_posts_sign.cancel, channels.edit_posts_sign.cancel_editing_sign)
-    handle(events.edit_posts_sign.choice, channels.edit_posts_sign.set_new)
+    dp.handle(events.edit_posts_sign.choice_empty, channels.edit_posts_sign.set_empty_post_sign)
+    dp.handle(events.edit_posts_sign.cancel, channels.edit_posts_sign.cancel_editing_sign)
+    dp.handle(events.edit_posts_sign.choice, channels.edit_posts_sign.set_new)
 
-    handle(events.new_post.photo, new_post.attach_photo)
-    handle(events.new_post.animation, new_post.attach_animation)
-    handle(events.new_post.choice_channel, new_post.save_channel)
-    handle(events.new_post.choice_publication_time_now, new_post.publish_post)
-    handle(events.new_post.choice_publication_time, new_post.schedule_post)
+    dp.handle(events.new_post.photo, new_post.attach_photo)
+    dp.handle(events.new_post.animation, new_post.attach_animation)
+    dp.handle(events.new_post.choice_channel, new_post.save_channel)
+    dp.handle(events.new_post.choice_publication_time_now, new_post.publish_post)
+    dp.handle(events.new_post.choice_publication_time, new_post.schedule_post)
 
-    handle(events.add_channel.entry, add_channel.send_info)
-    handle(events.add_channel.bot_kicked, add_channel.delete)
-    handle(events.add_channel.bot_member_updated, add_channel.check_rights_and_add)
+    dp.handle(events.add_channel.entry, add_channel.send_info)
+    dp.handle(events.add_channel.bot_kicked, add_channel.delete)
+    dp.handle(events.add_channel.bot_member_updated, add_channel.check_rights_and_add)
 
-    handle(events.commands.log_by_admin, admin.logs.send)
+    dp.handle(events.commands.log, logs.send)

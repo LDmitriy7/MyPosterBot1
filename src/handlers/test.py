@@ -1,5 +1,5 @@
 from groof import bot
 
 
-def on_test():
+def run():
     print(bot.get_chat(136817688))
