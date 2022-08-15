@@ -1,5 +1,5 @@
-from groof import ctx
+from groof import bot
 
 
 def on_test():
-    print(ctx.button)
+    print(bot.get_chat(136817688))

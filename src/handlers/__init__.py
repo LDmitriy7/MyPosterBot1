@@ -1,7 +1,7 @@
 from groof import handle
 
 import events
-from . import channels, new_post
+from . import channels, new_post, add_channel, admin
 from .main import on_start, on_start_by_admin, cancel
 from .test import on_test
 
@@ -28,5 +28,8 @@ def setup():
     handle(events.new_post.choice_publication_time_now, new_post.publish_post)
     handle(events.new_post.choice_publication_time, new_post.schedule_post)
 
-    # from . import add_channel
-    # from . import admin
+    handle(events.add_channel.entry, add_channel.send_info)
+    handle(events.add_channel.bot_kicked, add_channel.delete)
+    handle(events.add_channel.bot_member_updated, add_channel.check_rights_and_add)
+
+    handle(events.commands.log_by_admin, admin.logs.send)
