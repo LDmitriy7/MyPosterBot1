@@ -1,4 +1,4 @@
-from groof import on, bot, ctx
+from groof import bot, ctx
 
 import helpers
 from assets import kbs, models

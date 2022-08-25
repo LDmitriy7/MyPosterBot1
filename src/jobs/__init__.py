@@ -1,5 +1,3 @@
-from groof import Dispatcher
+ALL = [
 
-
-def setup(_dp: Dispatcher):
-    pass
+]

@@ -1,7 +1,7 @@
-from groof import on
+from groof import events
 
 from assets import commands, kbs
 
-entry = on.command(commands.CHANNELS)
-choice = on.button(kbs.Channels.channel, state='Channels')
-any_message = on.message(state='Channels')
+entry = events.command(commands.CHANNELS)
+choice = events.button(kbs.Channels.channel, state='Channels')
+any_message = events.message(state='Channels')
